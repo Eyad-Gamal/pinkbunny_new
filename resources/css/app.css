@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Nunito', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Swup Transitions */
+    html.is-animating .transition-fade {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    .transition-fade {
+        transition: opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Selection color */
+    ::selection {
+        background-color: rgba(255, 181, 197, 0.4);
+        color: inherit;
+    }
+}
+
+@layer components {
+    /* ─── Layout ─── */
+    .page-shell {
+        @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+    }
+
+    /* ─── Typography ─── */
+    .section-title {
+        @apply font-sans text-3xl font-extrabold tracking-tight text-bunny-text sm:text-4xl dark:text-bunny-dark-text;
+    }
+
+    .section-subtitle {
+        @apply mt-2 font-sans text-lg font-bold text-bunny-muted dark:text-bunny-dark-muted;
+    }
+
+    /* ─── Cards ─── */
+    .card-surface {
+        @apply rounded-[2rem] bg-white transition-all duration-300 dark:bg-bunny-dark-surface;
+    }
+
+    .card-surface-hover {
+        @apply card-surface hover:-translate-y-2 hover:shadow-elevated;
+    }
+
+    /* ─── Buttons ─── */
+    .pill-btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5
+               text-sm font-extrabold tracking-wide transition-all duration-300
+               hover:scale-[1.03] active:scale-[0.97];
+    }
+
+    .pill-btn-primary {
+        @apply pill-btn bg-bunny-text text-white hover:bg-black hover:shadow-elevated
+               dark:bg-bunny-primary dark:text-bunny-dark-bg dark:hover:bg-pink-300;
+    }
+
+    .pill-btn-outline {
+        @apply pill-btn border-2 border-bunny-text text-bunny-text hover:bg-bunny-text hover:text-white
+               dark:border-bunny-primary dark:text-bunny-primary dark:hover:bg-bunny-primary dark:hover:text-bunny-text;
+    }
+
+    .pill-btn-ghost {
+        @apply pill-btn text-bunny-text hover:bg-bunny-secondary-light
+               dark:text-bunny-dark-text dark:hover:bg-bunny-dark-card;
+    }
+
+    /* ─── Form Inputs ─── */
+    .field {
+        @apply mt-1 w-full rounded-2xl border-2 border-bunny-border bg-white px-4 py-3
+               text-sm font-bold text-bunny-text shadow-sm outline-none transition-all duration-200
+               placeholder:font-medium placeholder:text-bunny-muted/60
+               focus:border-bunny-secondary focus:ring-4 focus:ring-bunny-secondary/30
+               dark:border-bunny-dark-border dark:bg-bunny-dark-card dark:text-bunny-dark-text
+               dark:placeholder:text-bunny-dark-muted/50
+               dark:focus:border-bunny-primary dark:focus:ring-bunny-primary/30;
+    }
+
+    /* ─── Badges ─── */
+    .badge {
+        @apply inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-black uppercase tracking-wider;
+    }
+
+    .badge-primary {
+        @apply badge bg-bunny-primary text-bunny-text dark:text-bunny-dark-bg;
+    }
+
+    .badge-secondary {
+        @apply badge bg-bunny-secondary text-bunny-text dark:bg-bunny-secondary/30 dark:text-bunny-secondary;
+    }
+
+    .badge-danger {
+        @apply badge bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400;
+    }
+
+    .badge-success {
+        @apply badge bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400;
+    }
+
+    /* ─── Divider ─── */
+    .divider {
+        @apply border-t-2 border-bunny-border border-dashed my-4 dark:border-bunny-dark-border;
+    }
+}
+
+@layer utilities {
+    /* Image zoom */
+    .img-zoom {
+        @apply overflow-hidden rounded-3xl;
+    }
+    .img-zoom img {
+        @apply transition-transform duration-500 ease-out;
+    }
+    .img-zoom:hover img {
+        @apply scale-105;
+    }
+
+    /* Gold star rating color */
+    .star-gold {
+        color: #FCD34D;
+    }
+    .star-empty {
+        @apply text-bunny-border dark:text-bunny-dark-border;
+    }
+}
+
+/* ─── Stagger Animation (outside @layer so keyframes are always available) ─── */
+@keyframes fade-in-up {
+    0%   { opacity: 0; transform: translateY(16px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-stagger > * {
+    opacity: 0;
+    animation: fade-in-up 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.animate-stagger > *:nth-child(1)  { animation-delay: 50ms; }
+.animate-stagger > *:nth-child(2)  { animation-delay: 100ms; }
+.animate-stagger > *:nth-child(3)  { animation-delay: 150ms; }
+.animate-stagger > *:nth-child(4)  { animation-delay: 200ms; }
+.animate-stagger > *:nth-child(5)  { animation-delay: 250ms; }
+.animate-stagger > *:nth-child(6)  { animation-delay: 300ms; }
+.animate-stagger > *:nth-child(7)  { animation-delay: 350ms; }
+.animate-stagger > *:nth-child(8)  { animation-delay: 400ms; }
+.animate-stagger > *:nth-child(9)  { animation-delay: 450ms; }
+.animate-stagger > *:nth-child(10) { animation-delay: 500ms; }
+.animate-stagger > *:nth-child(11) { animation-delay: 550ms; }
+.animate-stagger > *:nth-child(12) { animation-delay: 600ms; }
+.animate-stagger > *:nth-child(13) { animation-delay: 650ms; }
+.animate-stagger > *:nth-child(14) { animation-delay: 700ms; }
+.animate-stagger > *:nth-child(15) { animation-delay: 750ms; }
+.animate-stagger > *:nth-child(16) { animation-delay: 800ms; }
+.animate-stagger > *:nth-child(n+17) { animation-delay: 850ms; }
