@@ -21,6 +21,10 @@ class SendWhatsAppOrderNotification implements ShouldQueue
 
     public function handle(WhatsAppService $whatsApp): void
     {
+        // 1. Send confirmation request to the CUSTOMER (reply 1 or 2)
+        $whatsApp->sendOrderConfirmation($this->order);
+
+        // 2. Send new-order notification to the ADMIN
         $whatsApp->sendNewOrderNotification($this->order);
     }
 

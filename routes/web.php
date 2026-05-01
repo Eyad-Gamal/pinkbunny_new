@@ -133,6 +133,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('/{id}',          [Admin\OrderController::class, 'show'])->name('show');
         Route::get('/{id}/invoice',  [Admin\OrderController::class, 'invoice'])->name('invoice');
         Route::put('/{id}/status',   [Admin\OrderController::class, 'updateStatus'])->name('update-status');
+        Route::post('/{id}/resend-whatsapp', [Admin\OrderController::class, 'resendWhatsApp'])->name('resend-whatsapp');
     });
 
     // Coupons

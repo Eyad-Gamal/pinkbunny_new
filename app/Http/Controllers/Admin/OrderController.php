@@ -67,6 +67,19 @@ class OrderController extends Controller
         return back()->with('toast', "Order status updated to: {$order->fresh()->status_label}");
     }
 
+    public function resendWhatsApp(string $id)
+    {
+        $order = Order::with(['user', 'items', 'address'])->findOrFail($id);
+
+        $sent = $this->whatsApp->sendOrderConfirmation($order);
+
+        if ($sent) {
+            return back()->with('toast', "WhatsApp confirmation resent for order #{$order->order_number}");
+        }
+
+        return back()->with('error', 'Failed to send WhatsApp message. Check logs for details.');
+    }
+
     public function export(Request $request)
     {
         $orders = Order::with(['user', 'items.product', 'address'])

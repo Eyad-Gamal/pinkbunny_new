@@ -22,17 +22,18 @@ class Order extends Model
         'notes', 'admin_notes',
         'shipped_at', 'delivered_at',
         'tracking_number', 'shipping_company',
-        'whatsapp_notified',
+        'whatsapp_notified', 'whatsapp_confirmed_at',
     ];
 
     protected $casts = [
-        'subtotal'          => 'decimal:2',
-        'shipping_fee'      => 'decimal:2',
-        'discount_amount'   => 'decimal:2',
-        'total_amount'      => 'decimal:2',
-        'shipped_at'        => 'datetime',
-        'delivered_at'      => 'datetime',
-        'whatsapp_notified' => 'boolean',
+        'subtotal'               => 'decimal:2',
+        'shipping_fee'           => 'decimal:2',
+        'discount_amount'        => 'decimal:2',
+        'total_amount'           => 'decimal:2',
+        'shipped_at'             => 'datetime',
+        'delivered_at'           => 'datetime',
+        'whatsapp_notified'      => 'boolean',
+        'whatsapp_confirmed_at'  => 'datetime',
     ];
 
     public function getActivitylogOptions(): LogOptions
