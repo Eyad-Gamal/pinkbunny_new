@@ -16,6 +16,7 @@ class OrderService
 
     public function placeOrder(User $user, array $data): Order
     {
+        try {
         return DB::transaction(function () use ($user, $data) {
             $couponDiscount = 0;
             $coupon = null;
@@ -81,6 +82,13 @@ class OrderService
 
             return $order;
         });
+        } catch (\Exception $e) {
+            \Log::error('Order placement failed: ' . $e->getMessage(), [
+                'user_id' => $user->id,
+                'trace'   => $e->getTraceAsString(),
+            ]);
+            throw $e;
+        }
     }
 
     public function updateStatus(Order $order, string $newStatus, ?string $adminId = null, array $extra = []): void

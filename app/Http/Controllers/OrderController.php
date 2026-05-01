@@ -49,7 +49,13 @@ class OrderController extends Controller
             $data['address_id'] = $address->id;
         }
 
-        $order = $this->orderService->placeOrder($request->user(), $data);
+        try {
+            $order = $this->orderService->placeOrder($request->user(), $data);
+        } catch (\Exception $e) {
+            return redirect()->route('checkout')
+                ->withInput()
+                ->with('error', __('messages.orders.place_failed', ['default' => 'Something went wrong while placing your order. Please try again.']));
+        }
 
         session()->forget(['cart_discount', 'coupon_code']);
 
