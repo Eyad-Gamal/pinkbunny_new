@@ -10,15 +10,15 @@
     <section class="page-shell">
         <div class="grid gap-10 lg:grid-cols-[1fr_0.95fr]">
             {{-- Image Gallery --}}
-            <div class="card-surface overflow-hidden p-4" x-data="{ activeImage: '{{ $images[0] }}' }">
+            <div class="card-surface overflow-hidden p-4" x-data="{ activeImage: '{{ str_starts_with($images[0], 'http') ? $images[0] : asset('storage/' . $images[0]) }}' }">
                 <div class="img-zoom overflow-hidden rounded-2xl">
                     <img :src="activeImage" alt="{{ $product->display_name }}" class="h-[440px] w-full rounded-2xl object-cover">
                 </div>
                 @if(count($images) > 1)
                     <div class="mt-4 grid grid-cols-4 gap-3">
                         @foreach($images as $image)
-                            <button type="button" @click="activeImage = '{{ $image }}'" class="overflow-hidden rounded-xl border-2 transition-all duration-200" :class="activeImage === '{{ $image }}' ? 'border-bunny-primary shadow-soft' : 'border-bunny-border dark:border-bunny-dark-border opacity-60 hover:opacity-100'">
-                                <img src="{{ $image }}" alt="Thumbnail" class="h-20 w-full object-cover">
+                            <button type="button" @click="activeImage = '{{ str_starts_with($image, 'http') ? $image : asset('storage/' . $image) }}'" class="overflow-hidden rounded-xl border-2 transition-all duration-200" :class="activeImage === '{{ str_starts_with($image, 'http') ? $image : asset('storage/' . $image) }}' ? 'border-bunny-primary shadow-soft' : 'border-bunny-border dark:border-bunny-dark-border opacity-60 hover:opacity-100'">
+                                <img src="{{ str_starts_with($image, 'http') ? $image : asset('storage/' . $image) }}" alt="Thumbnail" class="h-20 w-full object-cover">
                             </button>
                         @endforeach
                     </div>

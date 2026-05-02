@@ -631,7 +631,11 @@
             </div>
             <div class="header-right">
                 <span class="header-date">{{ now()->format('D, M d, Y') }}</span>
-                <div class="header-avatar">{{ substr(auth()->user()->name, 0, 1) }}</div>
+                @if(auth()->user()->avatar)
+                    <img src="{{ str_starts_with(auth()->user()->avatar, 'http') ? auth()->user()->avatar : asset('storage/' . auth()->user()->avatar) }}" class="header-avatar" style="object-fit: cover;">
+                @else
+                    <div class="header-avatar">{{ substr(auth()->user()->name, 0, 1) }}</div>
+                @endif
             </div>
         </header>
 

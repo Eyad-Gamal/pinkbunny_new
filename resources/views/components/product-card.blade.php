@@ -10,7 +10,7 @@
 <article class="group flex h-full flex-col overflow-hidden rounded-3xl border border-bunny-border bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated dark:border-bunny-dark-border dark:bg-bunny-dark-surface">
     {{-- Image --}}
     <div class="img-zoom relative aspect-[4/5]">
-        <img src="{{ $image }}" alt="{{ $product->display_name }}" class="h-full w-full object-cover" loading="lazy">
+        <img src="{{ str_starts_with($image, 'http') ? $image : asset('storage/' . $image) }}" alt="{{ $product->display_name }}" class="h-full w-full object-cover" loading="lazy">
 
         {{-- Overlays --}}
         @if($discount && $product->is_flash_sale)

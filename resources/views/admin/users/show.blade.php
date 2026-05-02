@@ -47,7 +47,11 @@
         <div class="card">
             <div class="card-header"><span class="card-title">Profile</span></div>
             <div class="card-body" style="text-align: center; padding: 32px;">
-                <div class="user-avatar" style="width: 64px; height: 64px; font-size: 24px; border-radius: 16px; margin: 0 auto 16px;">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
+                @if($user->avatar)
+                    <img src="{{ str_starts_with($user->avatar, 'http') ? $user->avatar : asset('storage/' . $user->avatar) }}" class="user-avatar" style="width: 64px; height: 64px; border-radius: 16px; margin: 0 auto 16px; object-fit: cover;">
+                @else
+                    <div class="user-avatar" style="width: 64px; height: 64px; font-size: 24px; border-radius: 16px; margin: 0 auto 16px;">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
+                @endif
                 <h3 class="text-primary" style="font-size: 18px; font-weight: 700;">{{ $user->name }}</h3>
                 @if($user->hasRole('admin'))<span class="badge badge-purple">Admin</span>@else<span class="badge badge-info">Customer</span>@endif
             </div>

@@ -6,12 +6,14 @@
     {{-- Brand Hero --}}
     <section class="page-shell">
         <div class="relative overflow-hidden rounded-[2.5rem] shadow-elevated">
-            <img src="{{ $brand->banner ?: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1600&q=80' }}" alt="{{ $brand->name }}" class="h-72 w-full object-cover">
+            @php $brandBanner = $brand->banner ?: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1600&q=80'; @endphp
+            <img src="{{ str_starts_with($brandBanner, 'http') ? $brandBanner : asset('storage/' . $brandBanner) }}" alt="{{ $brand->name }}" class="h-72 w-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
             <div class="absolute bottom-0 start-0 end-0 p-8">
                 <div class="flex items-end gap-5">
                     <div class="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-white/40 bg-white shadow-elevated backdrop-blur-sm">
-                        <img src="{{ $brand->logo ?: 'https://dummyimage.com/120x120/ffffff/D4577B&text=' . urlencode($brand->name) }}" alt="{{ $brand->name }}" class="max-h-12 max-w-12 object-contain">
+                        @php $brandLogo = $brand->logo ?: 'https://dummyimage.com/120x120/ffffff/D4577B&text=' . urlencode($brand->name); @endphp
+                        <img src="{{ str_starts_with($brandLogo, 'http') ? $brandLogo : asset('storage/' . $brandLogo) }}" alt="{{ $brand->name }}" class="max-h-12 max-w-12 object-contain">
                     </div>
                     <div>
                         <h1 class="font-serif text-3xl font-bold text-white sm:text-4xl">{{ $brand->name }}</h1>

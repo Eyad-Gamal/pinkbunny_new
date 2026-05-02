@@ -44,9 +44,13 @@
             @auth
                 <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                     <button @click="open = !open" class="inline-flex items-center gap-2.5 rounded-full border border-bunny-border px-3 py-1.5 text-sm font-medium transition-all duration-200 hover:border-bunny-primary hover:shadow-soft dark:border-bunny-dark-border dark:hover:border-bunny-primary">
-                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-bunny-primary/10 text-xs font-semibold text-bunny-primary">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                        </span>
+                        @if(auth()->user()->avatar)
+                            <img src="{{ str_starts_with(auth()->user()->avatar, 'http') ? auth()->user()->avatar : asset('storage/' . auth()->user()->avatar) }}" class="inline-flex h-7 w-7 rounded-full object-cover shadow-soft" alt="Avatar">
+                        @else
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-bunny-primary/10 text-xs font-semibold text-bunny-primary">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </span>
+                        @endif
                         <span class="max-w-[100px] truncate">{{ auth()->user()->name }}</span>
                         <svg class="h-3.5 w-3.5 text-bunny-muted transition-transform duration-200 dark:text-bunny-dark-muted" :class="open && 'rotate-180'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                     </button>

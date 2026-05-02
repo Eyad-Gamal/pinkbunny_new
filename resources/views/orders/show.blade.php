@@ -154,7 +154,7 @@
                             <div class="flex items-center gap-4 rounded-2xl border border-bunny-border p-4 transition-all hover:border-bunny-primary/30 dark:border-bunny-dark-border dark:hover:border-bunny-primary/30">
                                 @if($item->product_image)
                                     <div class="img-zoom h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl">
-                                        <img src="{{ $item->product_image }}" alt="{{ $item->product_name_en }}" class="h-full w-full object-cover">
+                                        <img src="{{ str_starts_with($item->product_image, 'http') ? $item->product_image : asset('storage/' . $item->product_image) }}" alt="{{ $item->product_name_en }}" class="h-full w-full object-cover">
                                     </div>
                                 @else
                                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl bg-bunny-accent/50 dark:bg-bunny-dark-card">

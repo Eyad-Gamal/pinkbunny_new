@@ -39,7 +39,7 @@
                         <div style="display: flex; align-items: center; gap: 16px; padding: 16px 22px; border-bottom: 1px solid var(--border); {{ $loop->last ? 'border-bottom: none;' : '' }}">
                             {{-- Product Image --}}
                             @if($item->product_image)
-                                <img src="{{ $item->product_image }}" alt="{{ $item->product_name_en }}" style="width: 60px; height: 60px; border-radius: 12px; object-fit: cover; flex-shrink: 0; background: var(--bg-elevated);">
+                                <img src="{{ str_starts_with($item->product_image, 'http') ? $item->product_image : asset('storage/' . $item->product_image) }}" alt="{{ $item->product_name_en }}" style="width: 60px; height: 60px; border-radius: 12px; object-fit: cover; flex-shrink: 0; background: var(--bg-elevated);">
                             @else
                                 <div style="width: 60px; height: 60px; border-radius: 12px; background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                     <span style="font-size: 20px; color: var(--text-muted);">📦</span>
@@ -108,7 +108,11 @@
                 <div class="card-header"><span class="card-title">Customer</span></div>
                 <div class="card-body">
                     <div class="flex items-center gap-1" style="margin-bottom: 16px;">
-                        <div class="user-avatar" style="width: 40px; height: 40px; font-size: 14px;">{{ substr($order->user->name, 0, 1) }}</div>
+                        @if($order->user->avatar)
+                            <img src="{{ str_starts_with($order->user->avatar, 'http') ? $order->user->avatar : asset('storage/' . $order->user->avatar) }}" class="user-avatar" style="width: 40px; height: 40px; object-fit: cover;">
+                        @else
+                            <div class="user-avatar" style="width: 40px; height: 40px; font-size: 14px;">{{ substr($order->user->name, 0, 1) }}</div>
+                        @endif
                         <div>
                             <strong class="text-primary" style="font-size: 14px;">{{ $order->user->name }}</strong>
                             <br><span style="font-size: 12px; color: var(--text-muted);">{{ $order->user->email }}</span>

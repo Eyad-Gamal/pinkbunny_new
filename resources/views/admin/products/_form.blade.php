@@ -78,7 +78,7 @@
         <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
             @foreach($p->images as $img)
                 <div style="position: relative;">
-                    <img src="{{ $img }}" style="width: 56px; height: 56px; border-radius: 8px; object-fit: cover;">
+                    <img src="{{ str_starts_with($img, 'http') ? $img : asset('storage/' . $img) }}" style="width: 56px; height: 56px; border-radius: 8px; object-fit: cover;">
                     <label style="position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; border-radius: 8px; opacity: 0; cursor: pointer; transition: opacity 0.15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">
                         <input type="checkbox" name="remove_images[]" value="{{ $img }}" style="display: none;">
                         <span style="color: var(--danger); font-size: 14px; font-weight: bold;">✕</span>

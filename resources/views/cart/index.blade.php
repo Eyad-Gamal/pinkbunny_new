@@ -22,7 +22,8 @@
                     @foreach($items as $item)
                         <div class="card-surface grid gap-5 p-5 sm:grid-cols-[100px_1fr]">
                             <div class="img-zoom overflow-hidden rounded-2xl">
-                                <img src="{{ $item->product->images[0] ?? 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80' }}" alt="{{ $item->product->display_name }}" class="h-24 w-full rounded-2xl object-cover sm:h-full">
+                                @php $cartImg = $item->product->images[0] ?? 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80'; @endphp
+                                <img src="{{ str_starts_with($cartImg, 'http') ? $cartImg : asset('storage/' . $cartImg) }}" alt="{{ $item->product->display_name }}" class="h-24 w-full rounded-2xl object-cover sm:h-full">
                             </div>
                             <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                                 <div class="min-w-0 flex-1">

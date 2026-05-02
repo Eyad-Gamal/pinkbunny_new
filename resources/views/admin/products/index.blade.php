@@ -40,7 +40,7 @@
                             <td>
                                 <div class="table-product">
                                     @if($product->first_image)
-                                        <img src="{{ $product->first_image }}" alt="">
+                                        <img src="{{ str_starts_with($product->first_image, 'http') ? $product->first_image : asset('storage/' . $product->first_image) }}" alt="">
                                     @else
                                         <div class="table-product-placeholder">💄</div>
                                     @endif

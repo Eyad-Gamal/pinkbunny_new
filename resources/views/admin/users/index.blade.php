@@ -29,7 +29,11 @@
                         <tr>
                             <td>
                                 <div class="flex items-center gap-1">
+                                @if($user->avatar)
+                                    <img src="{{ str_starts_with($user->avatar, 'http') ? $user->avatar : asset('storage/' . $user->avatar) }}" class="user-avatar" style="object-fit: cover;">
+                                @else
                                     <div class="user-avatar">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
+                                @endif
                                     <strong class="text-primary">{{ $user->name }}</strong>
                                 </div>
                             </td>

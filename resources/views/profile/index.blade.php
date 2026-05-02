@@ -6,9 +6,15 @@
     <section class="page-shell grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
         <aside class="card-surface h-fit p-6">
             <div class="text-center">
-                <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-bunny-accent text-3xl font-extrabold text-bunny-text">
-                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                </div>
+                @if($user->avatar)
+                    <div class="mx-auto flex h-24 w-24 items-center justify-center overflow-hidden rounded-full shadow-soft">
+                        <img src="{{ str_starts_with($user->avatar, 'http') ? $user->avatar : asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="h-full w-full object-cover">
+                    </div>
+                @else
+                    <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-bunny-accent text-3xl font-extrabold text-bunny-text">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                    </div>
+                @endif
                 <h2 class="mt-4 text-xl font-extrabold">{{ $user->name }}</h2>
                 <p class="text-sm text-bunny-muted dark:text-slate-300">{{ $user->email ?: $user->phone }}</p>
                 <span class="mt-4 inline-flex rounded-full bg-bunny-primary px-4 py-2 text-sm font-bold text-white">{{ number_format((float) $user->points_balance, 2) }} pts</span>

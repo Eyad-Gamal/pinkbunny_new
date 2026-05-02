@@ -14,7 +14,8 @@
         @foreach($brands as $brand)
             <a href="{{ route('brands.show', $brand) }}" class="card-surface-hover group p-6">
                 <div class="flex h-20 items-center justify-center rounded-2xl bg-bunny-bg dark:bg-bunny-dark-card">
-                    <img src="{{ $brand->logo ?: 'https://dummyimage.com/180x80/ffffff/D4577B&text=' . urlencode($brand->name) }}" alt="{{ $brand->name }}" class="max-h-12 max-w-full object-contain transition-transform duration-300 group-hover:scale-105">
+                    @php $brandLogo = $brand->logo ?: 'https://dummyimage.com/180x80/ffffff/D4577B&text=' . urlencode($brand->name); @endphp
+                    <img src="{{ str_starts_with($brandLogo, 'http') ? $brandLogo : asset('storage/' . $brandLogo) }}" alt="{{ $brand->name }}" class="max-h-12 max-w-full object-contain transition-transform duration-300 group-hover:scale-105">
                 </div>
                 <h2 class="mt-5 font-serif text-xl font-semibold text-bunny-text dark:text-bunny-dark-text">{{ $brand->name }}</h2>
                 <p class="mt-2 line-clamp-3 text-sm leading-relaxed text-bunny-muted dark:text-bunny-dark-muted">{{ $brand->display_description ?: 'A curated beauty brand inside the Pink Bunny collection.' }}</p>

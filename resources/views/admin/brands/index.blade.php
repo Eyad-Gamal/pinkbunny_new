@@ -22,7 +22,7 @@
                             <td>
                                 <div class="table-product">
                                     @if($brand->logo)
-                                        <img src="{{ $brand->logo }}" alt="" style="object-fit: contain; background: rgba(255,255,255,0.05); padding: 4px;">
+                                        <img src="{{ asset('storage/' . $brand->logo) }}" alt="" style="object-fit: contain; background: rgba(255,255,255,0.05); padding: 4px;">
                                     @else
                                         <div class="table-product-placeholder">✨</div>
                                     @endif
