@@ -246,8 +246,18 @@
 
         @media print {
             .no-print { display: none !important; }
-            body { background: #fff; }
+            body { background: #fff; color: #333; }
             .invoice { padding: 0; }
+            /* B&W Print Optimizations */
+            .brand-name span, .invoice-badge .order-num, .info-box-label, 
+            .totals-total span:last-child, .footer-thanks { color: #555 !important; }
+            .invoice-header { border-bottom-color: #ccc !important; }
+            .info-box { background: transparent !important; border-left-color: #888 !important; border: 1px solid #eee; }
+            .items-table th { background: transparent !important; color: #333 !important; border-bottom: 2px solid #ccc; border-top: 2px solid #ccc; }
+            .items-table td { border-bottom-color: #eee !important; }
+            .payment-row { background: transparent !important; border: 1px solid #ddd !important; }
+            .status-badge { background: transparent !important; color: #333 !important; border: 1px solid #999; }
+            .totals-row.discount { color: #333 !important; font-weight: bold; }
         }
     </style>
 </head>

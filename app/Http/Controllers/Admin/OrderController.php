@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Services\{OrderService, WhatsAppService};
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
     public function __construct(
-        private OrderService   $orderService,
-        private WhatsAppService $whatsApp,
+        private OrderService $orderService,
     ) {}
 
     public function index(Request $request)
@@ -60,24 +59,7 @@ class OrderController extends Controller
             'tracking_number', 'shipping_company', 'admin_notes'
         ));
 
-        if (in_array($request->status, ['shipped', 'delivered'])) {
-            $this->whatsApp->sendOrderStatusToCustomer($order->fresh());
-        }
-
         return back()->with('toast', "Order status updated to: {$order->fresh()->status_label}");
-    }
-
-    public function resendWhatsApp(string $id)
-    {
-        $order = Order::with(['user', 'items', 'address'])->findOrFail($id);
-
-        $sent = $this->whatsApp->sendOrderConfirmation($order);
-
-        if ($sent) {
-            return back()->with('toast', "WhatsApp confirmation resent for order #{$order->order_number}");
-        }
-
-        return back()->with('error', 'Failed to send WhatsApp message. Check logs for details.');
     }
 
     public function export(Request $request)

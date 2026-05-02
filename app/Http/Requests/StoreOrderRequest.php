@@ -12,7 +12,7 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'address_id'     => 'nullable|uuid|exists:addresses,id',
-            'payment_method' => 'required|in:cash_on_delivery,credit_card,paymob,fawry',
+            'payment_method' => 'required|in:cash_on_delivery,instapay,vodafone_cash',
             'coupon_code'    => 'nullable|string|max:50',
             'notes'          => 'nullable|string|max:500',
 
@@ -23,7 +23,6 @@ class StoreOrderRequest extends FormRequest
             'street'         => 'required_without:address_id|nullable|string|max:500',
             'city'           => 'required_without:address_id|nullable|string|max:100',
             'governorate'    => 'required_without:address_id|nullable|string|max:100',
-            'country'        => 'nullable|string|max:100',
         ];
     }
 

@@ -5,7 +5,7 @@ use App\Http\Controllers\{
     HomeController, ProductController, BrandController,
     CartController, WishlistController, OrderController,
     ProfileController, SettingsController, AboutController,
-    NewsletterController, ReviewController,
+    NewsletterController, ReviewController, EgyptController,
 };
 use App\Http\Controllers\Admin;
 
@@ -19,6 +19,7 @@ Route::get('/products/{slug}', [ProductController::class, 'show'])->name('produc
 Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
 Route::get('/brands/{brand:slug}', [BrandController::class, 'show'])->name('brands.show');
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::get('/egypt/areas', [EgyptController::class, 'areas'])->name('egypt.areas');
 
 // Dashboard redirect — admin goes to admin panel, customer goes to home
 Route::get('/dashboard', function () {
@@ -133,7 +134,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('/{id}',          [Admin\OrderController::class, 'show'])->name('show');
         Route::get('/{id}/invoice',  [Admin\OrderController::class, 'invoice'])->name('invoice');
         Route::put('/{id}/status',   [Admin\OrderController::class, 'updateStatus'])->name('update-status');
-        Route::post('/{id}/resend-whatsapp', [Admin\OrderController::class, 'resendWhatsApp'])->name('resend-whatsapp');
     });
 
     // Coupons

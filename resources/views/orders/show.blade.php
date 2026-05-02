@@ -208,19 +208,72 @@
                 {{-- Order Notes --}}
                 @if($order->notes)
                     <div class="card-surface p-8">
-                        <h2 class="font-serif text-xl font-semibold text-bunny-text dark:text-bunny-dark-text">Notes</h2>
+                        <h2 class="font-serif text-xl font-semibold text-bunny-text dark:text-bunny-dark-text">ملاحظات</h2>
                         <p class="mt-3 text-sm text-bunny-muted dark:text-bunny-dark-muted">{{ $order->notes }}</p>
+                    </div>
+                @endif
+
+                {{-- ═══ Payment Confirmation (Instapay / Vodafone Cash) ═══ --}}
+                @if(in_array($order->payment_method, ['instapay', 'vodafone_cash']) && $order->status === 'pending')
+                    <div class="card-surface border-2 border-amber-300 dark:border-amber-500/30 p-8 space-y-5">
+                        <h2 class="font-serif text-xl font-semibold text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                            ⚠️ تأكيد الدفع مطلوب
+                        </h2>
+
+                        @if($order->payment_method === 'instapay')
+                            <div class="rounded-2xl bg-amber-50 dark:bg-amber-500/10 p-5 space-y-3">
+                                <p class="text-sm font-bold text-bunny-text dark:text-bunny-dark-text">📱 حوّلي على إنستاباي:</p>
+                                <div class="space-y-2 text-sm text-bunny-muted dark:text-bunny-dark-muted">
+                                    <p>الحساب: <code class="bg-white dark:bg-black/20 px-2 py-0.5 rounded font-mono font-bold text-bunny-primary">eyadsaleh1@instapay</code></p>
+                                    <p>الرقم: <code class="bg-white dark:bg-black/20 px-2 py-0.5 rounded font-mono font-bold text-bunny-primary">01140748435</code></p>
+                                </div>
+                                <a href="https://ipn.eg/S/eyadsaleh1/instapay/4UHCjY" target="_blank" rel="noopener"
+                                   class="inline-flex items-center gap-2 rounded-xl bg-bunny-primary px-5 py-2.5 text-sm font-bold text-white transition hover:opacity-90 shadow-soft">
+                                    🔗 اضغطي هنا للتحويل مباشرة
+                                </a>
+                            </div>
+                        @else
+                            <div class="rounded-2xl bg-amber-50 dark:bg-amber-500/10 p-5 space-y-3">
+                                <p class="text-sm font-bold text-bunny-text dark:text-bunny-dark-text">📲 حوّلي على فودافون كاش:</p>
+                                <p class="text-sm text-bunny-muted dark:text-bunny-dark-muted">
+                                    الرقم: <code class="bg-white dark:bg-black/20 px-3 py-1 rounded font-mono text-lg font-bold text-bunny-primary">01140748435</code>
+                                </p>
+                            </div>
+                        @endif
+
+                        <div class="border-t border-amber-200 dark:border-amber-500/20 pt-4 space-y-3">
+                            <p class="text-sm text-bunny-text dark:text-bunny-dark-text font-semibold">
+                                📸 بعد ما تحوّلي، ابعتي اسكرين شوت على الواتساب لتأكيد الدفع:
+                            </p>
+                            @php
+                                $whatsappNumber = '201140748435';
+                                $whatsappMessage = urlencode(
+                                    "السلام عليكم 🐰\n" .
+                                    "أنا عملت تحويل لأوردر رقم: #{$order->order_number}\n" .
+                                    "المبلغ: " . number_format($order->total_amount, 2) . " جنيه\n" .
+                                    "طريقة الدفع: " . ($order->payment_method === 'instapay' ? 'إنستاباي' : 'فودافون كاش') . "\n\n" .
+                                    "📸 مرفق اسكرين شوت التحويل"
+                                );
+                            @endphp
+                            <a href="https://wa.me/{{ $whatsappNumber }}?text={{ $whatsappMessage }}"
+                               target="_blank" rel="noopener"
+                               class="inline-flex items-center gap-3 rounded-2xl bg-[#25D366] px-6 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#20BD5A] shadow-lg hover:shadow-xl">
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                ابعتي اسكرين شوت على واتساب
+                            </a>
+                        </div>
                     </div>
                 @endif
 
                 {{-- Actions --}}
                 <div class="card-surface p-8">
                     <div class="grid gap-3">
-                        <a href="{{ route('orders.index') }}" class="pill-btn-outline w-full text-center text-sm">All Orders</a>
-                        <a href="{{ route('products.index') }}" class="pill-btn-primary w-full text-center text-sm">Continue Shopping</a>
+                        <a href="{{ route('orders.index') }}" class="pill-btn-outline w-full text-center text-sm">كل الأوردرات</a>
+                        <a href="{{ route('products.index') }}" class="pill-btn-primary w-full text-center text-sm">كملي تسوق 🛍️</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 @endsection
+

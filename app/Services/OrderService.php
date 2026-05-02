@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Models\{Order, OrderItem, OrderTracking, User};
 use App\Notifications\OrderPlacedNotification;
-use App\Jobs\SendWhatsAppOrderNotification;
-use Illuminate\Support\Facades\DB;
+use App\Mail\OrderInvoiceMail;
+use Illuminate\Support\Facades\{DB, Mail};
 
 class OrderService
 {
@@ -68,16 +68,18 @@ class OrderService
 
             $this->cartService->clear($user);
 
+            // Send in-app notification
             try {
                 $user->notify(new OrderPlacedNotification($order));
             } catch (\Exception $e) {
                 \Log::warning('Order notification failed: ' . $e->getMessage());
             }
 
+            // Send invoice email
             try {
-                SendWhatsAppOrderNotification::dispatch($order)->afterCommit();
+                Mail::to($user->email)->queue(new OrderInvoiceMail($order));
             } catch (\Exception $e) {
-                \Log::warning('WhatsApp dispatch failed: ' . $e->getMessage());
+                \Log::warning('Invoice email failed: ' . $e->getMessage());
             }
 
             return $order;

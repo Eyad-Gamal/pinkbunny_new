@@ -35,18 +35,4 @@ return [
         ],
     ],
 
-    'twilio' => [
-        'sid'            => env('TWILIO_SID'),
-        'token'          => env('TWILIO_AUTH_TOKEN'),
-        'whatsapp_from'  => env('TWILIO_WHATSAPP_FROM', 'whatsapp:+14155238886'),
-        'admin_whatsapp' => env('ADMIN_WHATSAPP_NUMBER'),
-    ],
-
-    'evolution' => [
-        'url'            => env('EVOLUTION_API_URL', 'http://localhost:8080'),
-        'api_key'        => env('EVOLUTION_API_KEY'),
-        'instance'       => env('EVOLUTION_INSTANCE_NAME', 'pinkbunny'),
-        'webhook_secret' => env('EVOLUTION_WEBHOOK_SECRET'),
-    ],
-
 ];

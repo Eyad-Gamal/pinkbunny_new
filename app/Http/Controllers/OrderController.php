@@ -43,7 +43,7 @@ class OrderController extends Controller
                 'street'      => $data['street'],
                 'city'        => $data['city'],
                 'governorate' => $data['governorate'],
-                'country'     => $data['country'] ?? 'Egypt',
+                'country'     => 'Egypt',
                 'is_default'  => $request->user()->addresses()->count() === 1,
             ]);
             $data['address_id'] = $address->id;
@@ -54,13 +54,16 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('checkout')
                 ->withInput()
-                ->with('error', __('messages.orders.place_failed', ['default' => 'Something went wrong while placing your order. Please try again.']));
+                ->with('error', 'حصلت مشكلة أثناء تسجيل الأوردر. حاولي تاني.');
         }
 
         session()->forget(['cart_discount', 'coupon_code']);
 
+        $toast = "تم تأكيد أوردرك #{$order->order_number} بنجاح! 🐰 الفاتورة اتبعتت على الإيميل 📧";
+
         return redirect()->route('orders.show', $order->id)
-            ->with('toast', __('messages.orders.placed', ['number' => $order->order_number]));
+            ->with('toast', $toast)
+            ->with('just_placed', true);
     }
 
     public function index(Request $request)
