@@ -32,7 +32,7 @@ Route::get('/dashboard', function () {
 // ===================================================
 // AUTHENTICATED ROUTES
 // ===================================================
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // Cart
     Route::prefix('cart')->name('cart.')->group(function () {
