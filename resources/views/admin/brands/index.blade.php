@@ -33,7 +33,7 @@
                             <td><span class="badge {{ $brand->is_active ? 'badge-success' : 'badge-danger' }}">{{ $brand->is_active ? 'Active' : 'Inactive' }}</span></td>
                             <td>
                                 <div class="actions-cell">
-                                    <a href="#" class="link-action">Edit</a>
+                                    <a href="{{ route('admin.brands.edit', $brand->id) }}" class="link-action">Edit</a>
                                     <form method="POST" action="{{ route('admin.brands.destroy', $brand->id) }}" class="inline" onsubmit="return confirm('Delete this brand?')">@csrf @method('DELETE')
                                         <button class="link-action danger">Delete</button>
                                     </form>

@@ -119,6 +119,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::prefix('brands')->name('brands.')->group(function () {
         Route::get('/',                    [Admin\BrandController::class, 'index'])->name('index');
         Route::post('/',                   [Admin\BrandController::class, 'store'])->name('store');
+        Route::get('/{id}/edit',           [Admin\BrandController::class, 'edit'])->name('edit');
         Route::put('/{id}',                [Admin\BrandController::class, 'update'])->name('update');
         Route::delete('/{id}',             [Admin\BrandController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/toggle-active', [Admin\BrandController::class, 'toggleActive'])->name('toggle-active');
