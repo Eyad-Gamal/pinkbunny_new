@@ -1,0 +1,13 @@
+vendor/
+node_modules/
+.env
+.git/
+.gitignore
+storage/logs/*
+database/database.sqlite
+.phpunit.result.cache
+.phpunit.cache/
+deployment/
+README.md
+TODO.md
+tests/

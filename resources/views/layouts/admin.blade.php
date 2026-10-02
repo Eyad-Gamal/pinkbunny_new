@@ -505,6 +505,100 @@
         }
         .sidebar-overlay.active { display: block; }
 
+        /* ===== REAL-TIME TOAST NOTIFICATIONS ===== */
+        #rt-toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .rt-toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-elevated);
+            border: 1px solid rgba(244,114,182,0.25);
+            border-radius: 14px;
+            padding: 14px 16px;
+            min-width: 320px;
+            max-width: 380px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(244,114,182,0.1);
+            pointer-events: all;
+            opacity: 0;
+            transform: translateY(16px) scale(0.97);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        .rt-toast--visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .rt-toast--hiding {
+            opacity: 0;
+            transform: translateY(8px) scale(0.97);
+        }
+        .rt-toast-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: rgba(244,114,182,0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .rt-toast-body { flex: 1; min-width: 0; }
+        .rt-toast-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 2px;
+        }
+        .rt-toast-order {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Menlo', 'Monaco', monospace;
+        }
+        .rt-toast-meta {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+        .rt-toast-amount { color: var(--success); font-weight: 600; }
+        .rt-toast-btn {
+            flex-shrink: 0;
+            padding: 6px 14px;
+            background: var(--accent-glow);
+            color: var(--accent);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .rt-toast-btn:hover { background: rgba(244,114,182,0.25); }
+        .rt-toast-close {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            line-height: 1;
+            padding: 2px 4px;
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+        .rt-toast-close:hover { color: var(--text-primary); }
+
         /* ===== UTILITIES ===== */
         .text-primary { color: var(--text-primary) !important; }
         .text-muted { color: var(--text-muted) !important; }
@@ -667,5 +761,12 @@
             document.getElementById('sidebarOverlay').classList.remove('active');
         }
     </script>
+
+    {{-- Real-time admin notifications via Laravel Reverb --}}
+    @auth
+        @if(auth()->user()->hasRole('admin'))
+            @vite('resources/js/admin-notifications.js')
+        @endif
+    @endauth
 </body>
 </html>

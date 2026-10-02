@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Events\NewOrderPlaced;
 use App\Models\{Order, OrderItem, OrderTracking, User};
 use App\Notifications\OrderPlacedNotification;
 use App\Mail\OrderInvoiceMail;
-use Illuminate\Support\Facades\{DB, Mail};
+use Illuminate\Support\Facades\{DB, Log, Mail};
 
 class OrderService
 {
@@ -68,24 +69,40 @@ class OrderService
 
             $this->cartService->clear($user);
 
-            // Send in-app notification
+            // Send in-app notification to the customer
             try {
                 $user->notify(new OrderPlacedNotification($order));
             } catch (\Exception $e) {
-                \Log::warning('Order notification failed: ' . $e->getMessage());
+                Log::warning('Order notification failed: ' . $e->getMessage());
             }
 
             // Send invoice email
             try {
                 Mail::to($user->email)->queue(new OrderInvoiceMail($order));
             } catch (\Exception $e) {
-                \Log::warning('Invoice email failed: ' . $e->getMessage());
+                Log::warning('Invoice email failed: ' . $e->getMessage());
+            }
+
+            // Broadcast real-time notification to admin dashboard.
+            // Dispatched AFTER the transaction commits so the order is
+            // fully persisted before the queue worker picks it up.
+            try {
+                NewOrderPlaced::dispatch($order);
+                Log::info('[OrderService] NewOrderPlaced event dispatched', [
+                    'order_id'     => $order->id,
+                    'order_number' => $order->order_number,
+                ]);
+            } catch (\Exception $e) {
+                // Never let a broadcast failure break the order flow
+                Log::error('[OrderService] Failed to dispatch NewOrderPlaced: ' . $e->getMessage(), [
+                    'order_id' => $order->id,
+                ]);
             }
 
             return $order;
         });
         } catch (\Exception $e) {
-            \Log::error('Order placement failed: ' . $e->getMessage(), [
+            Log::error('Order placement failed: ' . $e->getMessage(), [
                 'user_id' => $user->id,
                 'trace'   => $e->getTraceAsString(),
             ]);
@@ -118,7 +135,7 @@ class OrderService
         try {
             $order->user->notify(new \App\Notifications\OrderStatusUpdatedNotification($order, $oldStatus));
         } catch (\Exception $e) {
-            \Log::warning('Status notification failed: ' . $e->getMessage());
+            Log::warning('Status notification failed: ' . $e->getMessage());
         }
     }
 
