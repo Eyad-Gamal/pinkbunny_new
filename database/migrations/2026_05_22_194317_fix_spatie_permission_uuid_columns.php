@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
@@ -9,53 +9,41 @@ use Illuminate\Support\Facades\Schema;
  * but the User model uses UUID (varchar 36) primary keys.
  * This migration alters model_has_roles and model_has_permissions
  * to use varchar(36) for model_id so UUID values fit.
+ *
+ * DB-agnostic: works on both MySQL and SQLite.
+ * Uses Laravel Schema builder instead of raw MySQL SQL.
  */
 return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        // On SQLite, foreign key enforcement must be disabled before structural changes
+        Schema::disableForeignKeyConstraints();
 
-        // Drop primary keys first (MySQL requires this before altering PK columns)
-        DB::statement('ALTER TABLE model_has_roles DROP PRIMARY KEY');
-        DB::statement('ALTER TABLE model_has_permissions DROP PRIMARY KEY');
+        Schema::table('model_has_roles', function (Blueprint $table) {
+            $table->string('model_id', 36)->change();
+        });
 
-        // Drop the composite indexes that reference model_id
-        DB::statement('ALTER TABLE model_has_roles DROP INDEX model_has_roles_model_id_model_type_index');
-        DB::statement('ALTER TABLE model_has_permissions DROP INDEX model_has_permissions_model_id_model_type_index');
+        Schema::table('model_has_permissions', function (Blueprint $table) {
+            $table->string('model_id', 36)->change();
+        });
 
-        // Change model_id from bigint unsigned → varchar(36) to support UUIDs
-        DB::statement('ALTER TABLE model_has_roles MODIFY model_id VARCHAR(36) NOT NULL');
-        DB::statement('ALTER TABLE model_has_permissions MODIFY model_id VARCHAR(36) NOT NULL');
-
-        // Re-add primary keys
-        DB::statement('ALTER TABLE model_has_roles ADD PRIMARY KEY (role_id, model_id, model_type)');
-        DB::statement('ALTER TABLE model_has_permissions ADD PRIMARY KEY (permission_id, model_id, model_type)');
-
-        // Re-add indexes
-        DB::statement('ALTER TABLE model_has_roles ADD INDEX model_has_roles_model_id_model_type_index (model_id, model_type)');
-        DB::statement('ALTER TABLE model_has_permissions ADD INDEX model_has_permissions_model_id_model_type_index (model_id, model_type)');
-
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        Schema::enableForeignKeyConstraints();
     }
 
     public function down(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        Schema::disableForeignKeyConstraints();
 
-        DB::statement('ALTER TABLE model_has_roles DROP PRIMARY KEY');
-        DB::statement('ALTER TABLE model_has_permissions DROP PRIMARY KEY');
-        DB::statement('ALTER TABLE model_has_roles DROP INDEX model_has_roles_model_id_model_type_index');
-        DB::statement('ALTER TABLE model_has_permissions DROP INDEX model_has_permissions_model_id_model_type_index');
+        Schema::table('model_has_roles', function (Blueprint $table) {
+            $table->unsignedBigInteger('model_id')->change();
+        });
 
-        DB::statement('ALTER TABLE model_has_roles MODIFY model_id BIGINT UNSIGNED NOT NULL');
-        DB::statement('ALTER TABLE model_has_permissions MODIFY model_id BIGINT UNSIGNED NOT NULL');
+        Schema::table('model_has_permissions', function (Blueprint $table) {
+            $table->unsignedBigInteger('model_id')->change();
+        });
 
-        DB::statement('ALTER TABLE model_has_roles ADD PRIMARY KEY (role_id, model_id, model_type)');
-        DB::statement('ALTER TABLE model_has_permissions ADD PRIMARY KEY (permission_id, model_id, model_type)');
-        DB::statement('ALTER TABLE model_has_roles ADD INDEX model_has_roles_model_id_model_type_index (model_id, model_type)');
-        DB::statement('ALTER TABLE model_has_permissions ADD INDEX model_has_permissions_model_id_model_type_index (model_id, model_type)');
-
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        Schema::enableForeignKeyConstraints();
     }
 };
+
