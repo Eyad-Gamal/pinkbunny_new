@@ -11,6 +11,9 @@ PORT="${PORT:-80}"
 sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
 sed -i "s/:80>/:${PORT}>/" /etc/apache2/sites-available/000-default.conf
 
+# Run package:discover now that env vars are available (skipped during build with --no-scripts)
+php artisan package:discover --ansi
+
 # Laravel optimizations
 php artisan config:cache
 php artisan route:cache

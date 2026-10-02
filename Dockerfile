@@ -1,4 +1,4 @@
-﻿# ── Stage 1: Build Vite assets ──────────────────────────────────────────────
+# ── Stage 1: Build Vite assets ──────────────────────────────────────────────
 FROM node:20-alpine AS assets
 
 WORKDIR /app
@@ -48,10 +48,12 @@ COPY . .
 COPY --from=assets /app/public/build public/build
 
 # Install PHP dependencies (no dev, optimised autoloader)
+# --no-scripts: skips post-autoload-dump (package:discover) which needs a .env to boot Laravel
 RUN composer install \
         --no-dev \
         --optimize-autoloader \
         --no-interaction \
+        --no-scripts \
     && chown -R www-data:www-data storage bootstrap/cache database
 
 # Copy and enable the custom entrypoint
